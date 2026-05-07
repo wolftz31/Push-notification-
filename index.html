@@ -2851,6 +2851,25 @@ window.addEventListener('load', () => {
         document.getElementById('introLoader').classList.add('hidden');
     }, 3000);
 });
+// ===== PUSH NOTIFICATIONS FROM GITHUB =====
+var lastNotifId = localStorage.getItem('lastNotifId') || 0;
+
+function checkNotifications() {
+    fetch('https://raw.githubusercontent.com/wolftz31/Push-notification-/main/notifications.json?t=' + Date.now())
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.id && data.id > lastNotifId) {
+                lastNotifId = data.id;
+                localStorage.setItem('lastNotifId', lastNotifId);
+                showStyledNotification(data.message, 'fa-bell', '#e8b931');
+            }
+        })
+        .catch(function() {});
+}
+
+setInterval(checkNotifications, 15000);
+checkNotifications();
+    
 </script>
 </body>
 </html>
